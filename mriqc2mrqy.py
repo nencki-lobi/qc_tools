@@ -35,7 +35,8 @@ def mriqc2mrqy(input_file, output_file):
         #data=np.column_stack((data,xs,ys))
         
         for subjid, values, x, y in zip(subjids,data,xs,ys):
-            images = f"['{subjid}.png']"
+            #images = f"['{subjid}.png']"
+            images = [f"{i}.png" for i in range(1, 43)]
             values.insert(0,images)
             values.insert(0,subjid)
             values.append(str(x))
