@@ -9,6 +9,7 @@ def mriqc2mrqy(input_file, output_file):
     header = lines[0].strip().split('\t')
     header[0] = "#dataset:Patient"
     header.insert(1, "Name of Images")
+    header.insert(2, "NUM") #number of images to show up
     
     #add t-sne (and umap header)
     header.extend(["x", "y"])    
@@ -37,8 +38,9 @@ def mriqc2mrqy(input_file, output_file):
         for subjid, values, x, y in zip(subjids,data,xs,ys):
             #images = f"['{subjid}.png']"
             images = [f"{i}.png" for i in range(1, 43)]
-            values.insert(0,images)
             values.insert(0,subjid)
+            values.insert(1,images)
+            values.insert(2,42) #number of images to show up
             values.append(str(x))
             values.append(str(y))
             f_output.write('\t'.join(map(str,values)) + '\n')
@@ -73,7 +75,7 @@ def main():
     args = parser.parse_args()
 
     mriqc2mrqy(args.input_file, args.output_file)
-    select_columns_and_save(args.output_file, args.output_file, ['#dataset:Patient', 'Name of Images', 'x', 'y','cjv', 'cnr', 'efc', 'fber', 'snr_total', 'wm2max', 'inu_med'])
+    select_columns_and_save(args.output_file, args.output_file, ['#dataset:Patient', 'Name of Images', 'NUM', 'cjv', 'cnr', 'efc', 'fber', 'snr_total', 'wm2max', 'inu_med','x', 'y'])
 
 if __name__ == "__main__":
     main()
