@@ -1,6 +1,7 @@
-from tsne import bh_sne
-import numpy as np
 import argparse
+import numpy as np
+from sklearn.manifold import TSNE
+import umap
 
 def mriqc2mrqy(input_file, output_file):
     with open(input_file, 'r') as f_input:
@@ -12,7 +13,7 @@ def mriqc2mrqy(input_file, output_file):
     header.insert(2, "NUM") #number of images to show up
     
     #add t-sne (and umap header)
-    header.extend(["x", "y"])    
+    header.extend(["x", "y", "u", "v"])    
 
     with open(output_file, 'w') as f_output:
         f_output.write("#start_time:	2021-12-20 09:29:49.078558\n")
@@ -30,19 +31,26 @@ def mriqc2mrqy(input_file, output_file):
          
         #calculate tsne coordinates
         array = np.array(data)
-        data_tsne = bh_sne(array)
+        data_tsne = TSNE(n_components=2).fit_transform(array)
         xs = data_tsne[:, 0]
         ys = data_tsne[:, 1]
-        #data=np.column_stack((data,xs,ys))
+        #calculate umap coordinates
+        s_umap = array.copy()
+        reducer = umap.UMAP()
+        embedding = reducer.fit_transform(s_umap)
+        us = embedding[:,0]
+        vs = embedding[:,1]
         
-        for subjid, values, x, y in zip(subjids,data,xs,ys):
+        for subjid, values, x, y, u, v in zip(subjids,data,xs,ys,us,vs):
             #images = f"['{subjid}.png']"
             images = [f"{i}.png" for i in range(1, 43)]
+            values.insert(0,images)
+            values.insert(1,42) #number of images to show up
             values.insert(0,subjid)
-            values.insert(1,images)
-            values.insert(2,42) #number of images to show up
             values.append(str(x))
             values.append(str(y))
+            values.append(str(u))
+            values.append(str(v))
             f_output.write('\t'.join(map(str,values)) + '\n')
             
 def select_columns_and_save(input_file, output_file, selected_columns):
