@@ -83,7 +83,7 @@ def main():
     args = parser.parse_args()
 
     mriqc2mrqy(args.input_file, args.output_file)
-    select_columns_and_save(args.output_file, args.output_file, ['#dataset:Patient', 'Name of Images', 'NUM', 'cjv', 'cnr', 'efc', 'fber', 'snr_total', 'wm2max', 'inu_med','x', 'y'])
+    select_columns_and_save(args.output_file, args.output_file, ['#dataset:Patient', 'Name of Images', 'NUM', 'cjv', 'cnr', 'efc', 'fber', 'snr_total', 'wm2max', 'inu_med','x', 'y', 'u', 'v'])
 
 if __name__ == "__main__":
     main()
