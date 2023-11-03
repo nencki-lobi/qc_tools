@@ -1,0 +1,1 @@
+Executing with: freeview -v aaa/mri.nii.gz
