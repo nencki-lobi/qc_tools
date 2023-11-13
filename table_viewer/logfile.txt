@@ -1,3 +1,0 @@
-Executing with: freeview -v aaa/mri.nii.gz
-Executing with: freeview
-Executing with: freeview header
