@@ -10,8 +10,6 @@ fetch('/data.csv')
     .then(data => {
         originalData = data; // Store the original data
         const rows = data.split('\n');
-        //const lowerBounds = rows[1].split(',').map(Number);
-		//const upperBounds = rows[2].split(',').map(Number);
         let lowerBounds, upperBounds;
 
         // Loop through the rows to gather lower and upper bounds
@@ -30,6 +28,12 @@ fetch('/data.csv')
         rows.forEach((row, index) => {
             const columns = row.split(',');
             const subjId = columns[0].trim();
+
+            // Skip rows with identifiers "low" and "high"
+            if (subjId === 'low' || subjId === 'high') {
+                return;
+            }
+
             const tr = document.createElement('tr');
 
             columns.forEach((column, colIndex) => {
