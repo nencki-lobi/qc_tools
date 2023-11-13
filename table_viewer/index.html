@@ -25,15 +25,28 @@
             max-width: 100%;
             height: auto;
         }
+        input[type="text"] {
+            width: 600px; /* Adjust the width as needed */
+            padding: 5px; /* Adjust the padding as needed */
+        }
+        button {
+            margin-top: 10px; /* Adjust the margin as needed */
+            padding: 8px;
+        }
     </style>
 </head>
 <body>
+    <input type="text" id="command-field" placeholder="Enter custom command here. Use $subj as variable name.">
+    <button id="save-button">Save CSV</button>
+    <div id="space-div" style="margin-bottom: 10px;"></div>
+    
     <table id="csv-table">
         <!-- CSV data will be inserted here dynamically using JavaScript -->
     </table>
     <div id="image-container">
         <!-- Images will be displayed here dynamically using JavaScript -->
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

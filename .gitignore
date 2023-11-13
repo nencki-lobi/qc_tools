@@ -1,0 +1,11 @@
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+.DS_Store
+*~
+
+data.csv
+logfile.csv
+error.log

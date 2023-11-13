@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     let originalData; // Variable to store the original data
     const table = document.getElementById('csv-table');
-    const commandField = document.createElement('input');
-    const executeButton = document.createElement('button');
+    const commandField = document.getElementById('command-field');
+    const executeButton = document.getElementById('save-button');
 
 // Fetch data from the server
 fetch('/data.csv')
@@ -10,12 +10,26 @@ fetch('/data.csv')
     .then(data => {
         originalData = data; // Store the original data
         const rows = data.split('\n');
-        const lowerBounds = rows[1].split(',').map(Number);
-		const upperBounds = rows[2].split(',').map(Number);
+        //const lowerBounds = rows[1].split(',').map(Number);
+		//const upperBounds = rows[2].split(',').map(Number);
+        let lowerBounds, upperBounds;
 
+        // Loop through the rows to gather lower and upper bounds
         rows.forEach((row, index) => {
             const columns = row.split(',');
-            const subjId = columns[0].trim(); // Assuming subj_id is in the first column
+            const subjId = columns[0].trim();
+
+            if (subjId === 'low') {
+                lowerBounds = columns.slice(1).map(Number);
+            } else if (subjId === 'high') {
+                upperBounds = columns.slice(1).map(Number);
+            }
+        });
+
+        // Loop through the rows again to apply the yellow background
+        rows.forEach((row, index) => {
+            const columns = row.split(',');
+            const subjId = columns[0].trim();
             const tr = document.createElement('tr');
 
             columns.forEach((column, colIndex) => {
@@ -23,10 +37,10 @@ fetch('/data.csv')
                 td.textContent = column;
                 
                 const cellValue = parseFloat(column.trim());
-                if (!isNaN(cellValue)) {
-                    if (cellValue < lowerBounds[colIndex]) {
+                if (!isNaN(cellValue) && lowerBounds && upperBounds) {
+                    if (cellValue < lowerBounds[colIndex - 1]) {
                         td.style.backgroundColor = 'yellow'; // Cell value is lower than the lower bound
-                    } else if (cellValue > upperBounds[colIndex]) {
+                    } else if (cellValue > upperBounds[colIndex - 1]) {
                         td.style.backgroundColor = 'yellow'; // Cell value is higher than the lower bound
                     }
                 }
@@ -36,7 +50,7 @@ fetch('/data.csv')
 
 			    if (colIndex === columns.length - 1) {
 			        const selectForm = document.createElement('select');
-			        const options = ['good', 'rerun', 'bad'];
+			        const options = ['good', 'rerun', 'bad']; // MODIFY if You need custom qc labels
 
 			        options.forEach(option => {
 			            const optionElement = document.createElement('option');
@@ -62,7 +76,7 @@ fetch('/data.csv')
 
             const imgTd = document.createElement('td');
             const img = document.createElement('img');
-            img.src = `${subjId}.jpg`; // Assuming images are named as subjId.jpg
+            img.src = `imgs/${subjId}.jpg`; // Assuming images are named as subjId.jpg
             img.classList.add('thumbnail'); // Optional: Add a CSS class for styling images
             imgTd.appendChild(img);
             tr.appendChild(imgTd);
@@ -82,11 +96,6 @@ fetch('/data.csv')
         });
     })
     .catch(error => console.error('Error:', error));
-
-
-    // Add a command input field above the table
-    commandField.placeholder = 'Enter custom command here. Use $subj as variable name.';
-    document.body.insertBefore(commandField, table);
 
     function executeCommand(command) {
         var xhr = new XMLHttpRequest();
@@ -132,6 +141,4 @@ fetch('/data.csv')
 	    window.URL.revokeObjectURL(url);
     });
 
-    // Add the "Save" button above the table
-    document.body.insertBefore(saveButton, table);
 });
