@@ -12,3 +12,11 @@ Hints:
 - Rows labeled "low" and "high" serve to define lower and upper thresholds. Values outside these limits will be colored yellow.
 - In the last column, images named the same as the index column ({subj}.jpg) will be loaded from the `./imgs` directory.
 
+## mriqc2mrqy
+
+`Now I prefer table_viewer (above) than MRQy but I leave it here.`
+
+I offer a converter that reads the output of the mriqc app (group_T1w.csv) and enhances its visualization using MRQy (https://github.com/ccipd/MRQy). The 'html2pngs' script exports graphics saved in mriqc HTML files. Subsequently, 'mriqc2mrqy' extracts selected columns and generates TSNE and UMAP plots. Utilize the original MRQy GUI to read and display the results.
+
+Todo:
+- add some mods to MRQy for better viewing
