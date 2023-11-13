@@ -7,5 +7,5 @@ __pycache__/
 *~
 
 data.csv
-logfile.csv
+logfile.txt
 error.log
