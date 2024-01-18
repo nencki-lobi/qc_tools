@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let originalData; // Variable to store the original data
     const table = document.getElementById('csv-table');
     const commandField = document.getElementById('command-field');
-    const executeButton = document.getElementById('save-button');
 
 // Fetch data from the server
 fetch('/data.csv')
@@ -118,7 +117,7 @@ fetch('/data.csv')
         xhr.send();
     }
 
-	const saveButton = document.createElement('button');
+	const saveButton = document.getElementById('save-button');
 	saveButton.textContent = 'Save CSV';
 	saveButton.addEventListener('click', () => {
 	    const modifiedData = [...table.querySelectorAll('tr')].map(row => {
